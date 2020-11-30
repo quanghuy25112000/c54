@@ -124,4 +124,9 @@ userCollection.addUser(user1);
 userCollection.addUser(user2);
 console.log(userCollection.listUser[0]);
 userCollection.show();
+import{Studens} from './btvn.js'
+import{ListStudent} from './btvn.js'
+const list=new ListStudent();
+list.addStudent("a","huy",20,"ls")
+console.log(list);
 
