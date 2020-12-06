@@ -79,5 +79,6 @@ const list =new ListStudent();
 list.addStudent(s1);
 list.addStudent(s2);
 list.addStudent(s3)
+console.log(list);
 list.show();
 window.customElements.define('card-container',Card)

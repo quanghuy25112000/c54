@@ -51,6 +51,7 @@ const style=`<style>
     constructor(){
         super();
         this._shadowDom=this.attachShadow({mode:'open'});
+
         this.ten=this.getAttribute('ten')
         this.tuoi=this.getAttribute('tuoi')
         this.que=this.getAttribute('que')
@@ -65,8 +66,19 @@ const style=`<style>
             </div>
         </div>`
     }
+    connectedCallback(){
+        this._shadowDom.innerHTML=`
+        ${style}
+        <div class="card">
+        <img class="img" src="${this.imgsrc}">
+            <div class="body">
+            <div class="ten">${this.ten}</div>
+            <div class="thongtin">${this.tuoi} tuổi sống ở ${this.que}</div>
+            </div>
+        </div>`
+    }
 }
-import {getData,getDatas} from './ultis.js'
+import {getDatas} from './ultis.js'
 
 
 
@@ -75,7 +87,7 @@ import {getData,getDatas} from './ultis.js'
 
 const list =new ListStudent()
 async function getMany(){
-    const res =await firebase.firestore().collection('user').get()
+    const res =await firebase.firestore().collection('user').where("tuoi","in",[18,19,20]).get()
     const user=getDatas(res)
     for(let i=0;i<user.length;i++){
         const student=new Students(`${user[i].ten}`,user[i].tuoi,`${user[i].que}`,`${user[i].img}`)
@@ -91,4 +103,25 @@ getMany()
 // const s1 =new Students("A",18,"ls","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj2qu-15n-PLgoVmNth4LldtshxWe4A-WJrQ&usqp=CAU")
 // list.addStudent(s1)
 console.log(list);
+function adDocument(){
+    const data={
+        ten:'alex',
+        tuoi:20
+    }
+    firebase.firestore().collection('user').add(data)
+}
+//adDocument()
+function updateDocument(){
+    const docId='hArKNgsyfOWQhQ5yxxGy'
+    const data={
+        number:firebase.firestore.FieldValue.arrayUnion('3')
+    }
+    firebase.firestore().collection('user').doc(docId).update(data)
+}
+updateDocument()
+function deleteDocument(){
+    const docId='hArKNgsyfOWQhQ5yxxGy'
+    firebase.firestore().collection('user').doc(docId).delete()
+}
+deleteDocument()
 window.customElements.define('card-container',Card)
